@@ -15,5 +15,13 @@
     background: darkgreen;
     border: 3px double #ffffff;
     box-sizing: border-box;
+    z-index: 1;
 }
 
+.snake_food {
+    position: absolute;
+    background: rebeccapurple;
+    border: 3px double #ffffff;
+    box-sizing: border-box;
+    z-index: 2;
+}

@@ -12,7 +12,7 @@ function Snake(options) {
 Snake.prototype.init = function () {
     this.initField();
     this.initSnake();
-
+    this.generateFood();
     this.makeStep();
     this.listenPress();
 }
@@ -75,6 +75,24 @@ Snake.prototype.moveSnake = function () {
     for (var i = 0; i < len - 1; i++) {
         this.snake[i].direction = this.snake[i + 1].direction;
     }
+
+    // this loop check cords snake head cell and food cords if this same remove food element and call grow snake function
+
+    var head = this.snake[this.snake.length - 1];
+
+    for( var i = 0, len = this.food.length; i < len; i++) {
+        var food = this.food[i];
+        if(food.posX === head.posX && food.posY === head.posY) {
+           food.element.remove();
+           this.food.splice(i, 1);
+           this.grow();
+        }
+    }
+
+}
+
+Snake.prototype.grow = function () {
+    
 }
 
 //Assign direction head snake received in listenPress function
@@ -82,6 +100,37 @@ Snake.prototype.moveSnake = function () {
 Snake.prototype.changeDirection = function (direction) {
     var head = this.snake[this.snake.length - 1];
     head.direction = direction;
+}
+
+// This method generate food
+// Use object math method random generate number and multiply this on fieldSize
+// Use method floor
+// Check cords food and snakeItem in loop if cord food == cords snake cell return generate function
+
+Snake.prototype.generateFood = function () {
+    var x = Math.floor(Math.random() * this.options.field.sizeX );
+    var y = Math.floor(Math.random() * this.options.field.sizeY );
+
+    for(var i = 0, len = this.snake.length; i < len; i++) {
+        var snakeItem = this.snake[i];
+        if(snakeItem.posX === x && snakeItem.posY === y) {
+            return this.generateFood();
+        }
+    }
+
+    var food = document.createElement('div');
+        food.className = 'snake_food';
+        food.style.height =
+            food.style.width = this.options.cellSize + 'px';
+        food.style.top = (y * this.options.cellSize) + 'px';
+        food.style.left = (x * this.options.cellSize) + 'px';
+
+        this.food.push({
+            element: food,
+            posX: x,
+            posY: y
+        });
+        this.element.appendChild(food);
 }
 
 
