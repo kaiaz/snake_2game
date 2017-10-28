@@ -7,4 +7,12 @@
 .snake {
     background: dimgray;
     margin: 0 auto;
+    position: relative;
+}
+
+.snake_item {
+    position: absolute;
+    background: darkgreen;
+    border: 3px double #ffffff;
+    box-sizing: border-box;
 }
