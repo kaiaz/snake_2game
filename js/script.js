@@ -1,3 +1,4 @@
+// function constructor snake
 function Snake(options) {
     this.options = options;
     this.element = this.options.element,
@@ -50,6 +51,19 @@ Snake.prototype.initSnake = function () {
 Snake.prototype.moveSnake = function () {
     for(var i = 0, len = this.snake.length; i < len; i++) {
         var snakeItem = this.snake[i];
+        if(snakeItem.inStomach) {
+            if(
+                snakeItem.posX === this.snake[i + 1].posX &&
+                snakeItem.posY === this.snake[i + 1].posY
+            ) {
+                snakeItem.inStomach = false;
+                snakeItem.element.className = 'snake_item';
+
+                this.generateFood();
+            }
+            continue;
+        }
+
         switch(snakeItem.direction){
             case 'left':
                 snakeItem.posX--;
@@ -76,24 +90,29 @@ Snake.prototype.moveSnake = function () {
         this.snake[i].direction = this.snake[i + 1].direction;
     }
 
-    // this loop check cords snake head cell and food cords if this same remove food element and call grow snake function
+    // get head snake_item and saving this in var head
+    // get food array in loop and looping this
+    // if head posX and posY === food posX and posY assigned this food[i] in snakeItem var
+    // Then giving this class_name snake_item and snake_item_inStomach
+    // inStomach snakeItem property now true
+    // method unshift adding snakeItem keeping food[i] in array snake
 
     var head = this.snake[this.snake.length - 1];
 
     for( var i = 0, len = this.food.length; i < len; i++) {
         var food = this.food[i];
         if(food.posX === head.posX && food.posY === head.posY) {
-           food.element.remove();
-           this.food.splice(i, 1);
-           this.grow();
+            var snakeItem = food;
+            snakeItem.element.className = 'snake_item snake_item_inStomach';
+            snakeItem.inStomach = true;
+            this.snake.unshift(snakeItem);
+            this.food.splice(i, 1);
+
         }
     }
 
 }
 
-Snake.prototype.grow = function () {
-    
-}
 
 //Assign direction head snake received in listenPress function
 
@@ -107,9 +126,16 @@ Snake.prototype.changeDirection = function (direction) {
 // Use method floor
 // Check cords food and snakeItem in loop if cord food == cords snake cell return generate function
 
+// var food keep created div
+// giving this className = 'snake_food'
+// giving food size
+// and position food get random cords from vatiables x, y
+// push food object in array food
+// appending food in field
+
 Snake.prototype.generateFood = function () {
-    var x = Math.floor(Math.random() * this.options.field.sizeX );
-    var y = Math.floor(Math.random() * this.options.field.sizeY );
+    var x = Math.floor(Math.random() * this.options.field.sizeX - 1);
+    var y = Math.floor(Math.random() * this.options.field.sizeY - 1);
 
     for(var i = 0, len = this.snake.length; i < len; i++) {
         var snakeItem = this.snake[i];
@@ -138,27 +164,25 @@ Snake.prototype.generateFood = function () {
 
 Snake.prototype.listenPress = function () {
     var _this = this;
+    directions = {
+        87: 'top',
+        38: 'top',
+
+        83: 'bottom',
+        40: 'bottom',
+
+        65: 'left',
+        37: 'left',
+
+        68: 'right',
+        39: 'right'
+    }
+
     window.addEventListener('keydown', function () {
         var e = window.event;
-        switch (e.keyCode) {
-            case 87:
-            case 38:
-                _this.changeDirection('top');
-                break;
-            case 83:
-            case 40:
-                _this.changeDirection('bottom');
-                break;
-            case 65:
-            case 37:
-                _this.changeDirection('left');
-                break;
-            case 68:
-            case 39:
-                _this.changeDirection('right');
-                break;
+        if(e.keyCode in directions) {
+            _this.changeDirection(directions[e.keyCode]);
         }
-        console.log(e.keyCode);
     })
 }
 
@@ -177,6 +201,16 @@ Snake.prototype.checkGameOver = function () {
         return true;
     }
 
+    //  looping snake array and cheking every snakeItem
+    // if element posX, posY = posX, posY head element  and property inStomach false - Game over
+
+    for(var i = 0, len = this.snake.length-1; i < len; i++ ){
+        var snakeItem = this.snake[i];
+        if(head.posX === snakeItem.posX && head.posY === snakeItem.posY  && !snakeItem.inStomach) {
+            return  true;
+        }
+    }
+
     return false
 }
 
@@ -185,9 +219,9 @@ Snake.prototype.checkGameOver = function () {
 Snake.prototype.makeStep = function () {
     var _this = this;
     if(!this.checkGameOver()) {
-        this.moveSnake();
        return setTimeout(function () {
-            _this.makeStep();
+            _this.moveSnake();
+           _this.makeStep();
         }, this.options.snake.speed)
     }
 

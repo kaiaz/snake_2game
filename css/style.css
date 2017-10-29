@@ -25,3 +25,9 @@
     box-sizing: border-box;
     z-index: 2;
 }
+
+.snake_item_inStomach {
+    background: darkred;
+    border: 3px double #ffffff;
+    z-index: 5;
+}
