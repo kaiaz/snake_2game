@@ -216,6 +216,7 @@ Snake.prototype.checkGameOver = function () {
 
 // keep inside setTimeout  function. This call makeStep and itself inside makeStep
 // makeStep checks result returned in function CheckGameOver if !checkGameOver this working
+// if checkGameOver true - call die function
 Snake.prototype.makeStep = function () {
     var _this = this;
     if(!this.checkGameOver()) {
@@ -227,6 +228,9 @@ Snake.prototype.makeStep = function () {
 
     this.die()
 }
+
+//Function Die looping every snakeItem use index and shift this with increase interval
+// food also shift in array use interval
 
 Snake.prototype.die = function () {
     var _this = this;
@@ -244,6 +248,8 @@ Snake.prototype.die = function () {
         }, i * 200)
     }
 }
+
+// createSnake object use constructor snake add properties
 
 var createSnake = new Snake({
     element: document.querySelector('.snake'),
