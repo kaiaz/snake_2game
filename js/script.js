@@ -225,7 +225,24 @@ Snake.prototype.makeStep = function () {
         }, this.options.snake.speed)
     }
 
-    alert('Game over!')
+    this.die()
+}
+
+Snake.prototype.die = function () {
+    var _this = this;
+    for (var i = 0, len = this.snake.length; i < len; i++) {
+        setTimeout( function () {
+            var snakeItem = _this.snake.shift();
+            snakeItem.element.className = 'snake_item snake_item_die'
+        }, i * 200)
+    }
+
+    for (var i = 0, len = this.snake.length; i < len; i++) {
+        setTimeout( function () {
+            var food = _this.food.shift();
+            snakeItem.element.className = 'snake_food snake_food_die'
+        }, i * 200)
+    }
 }
 
 var createSnake = new Snake({

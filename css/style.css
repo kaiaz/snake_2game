@@ -16,6 +16,9 @@
     border: 3px double #ffffff;
     box-sizing: border-box;
     z-index: 1;
+    transition-property: left, top, opacity, background-color;
+    transition-timing-function:  ease-in-out;
+    transition-duration: .5s;
 }
 
 .snake_food {
@@ -27,7 +30,18 @@
 }
 
 .snake_item_inStomach {
-    background: darkred;
+    background: orangered;
     border: 3px double #ffffff;
     z-index: 5;
+    transition-property:  opacity, background-color;
+    transition-timing-function:  ease-in-out;
+    transition-duration: .5s;
 }
+
+.snake_item_die {
+    opacity: 0;
+    background: darkred;
+}
+
+
+
