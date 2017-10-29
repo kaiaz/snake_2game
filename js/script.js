@@ -123,7 +123,7 @@ Snake.prototype.changeDirection = function (direction) {
 
 // This method generate food
 // Use object math method random generate number and multiply this on fieldSize
-// Use method floor
+// Use method ceil and subtracting 1 from result
 // Check cords food and snakeItem in loop if cord food == cords snake cell return generate function
 
 // var food keep created div
@@ -134,8 +134,8 @@ Snake.prototype.changeDirection = function (direction) {
 // appending food in field
 
 Snake.prototype.generateFood = function () {
-    var x = Math.floor(Math.random() * this.options.field.sizeX - 1);
-    var y = Math.floor(Math.random() * this.options.field.sizeY - 1);
+    var x = Math.ceil(Math.random() * this.options.field.sizeX) - 1;
+    var y = Math.ceil(Math.random() * this.options.field.sizeY) - 1;
 
     for(var i = 0, len = this.snake.length; i < len; i++) {
         var snakeItem = this.snake[i];
